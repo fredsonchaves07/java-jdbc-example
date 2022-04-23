@@ -11,6 +11,10 @@ import java.sql.Statement;
 public class Program {
 
     public static void main(String[] args) {
+        selectDepartament();
+    }
+
+    public static void selectDepartament() {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
