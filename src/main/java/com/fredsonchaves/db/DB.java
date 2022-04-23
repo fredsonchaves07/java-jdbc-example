@@ -29,6 +29,7 @@ public class DB {
             } catch (SQLException error) {
                 throw new DBException(error.getMessage());
             }
+            connection = null;
         }
     }
 
