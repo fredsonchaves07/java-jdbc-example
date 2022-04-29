@@ -1,7 +1,8 @@
-package com.fredsonchaves.db.application;
+package com.fredsonchaves.application;
 
 import com.fredsonchaves.db.DB;
 import com.fredsonchaves.db.DBException;
+import com.fredsonchaves.db.DBIntegrityException;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -10,9 +11,14 @@ import java.text.SimpleDateFormat;
 public class Program {
 
     public static void main(String[] args) {
-        selectDepartament();
-        insertSeller();
-        updateSeller();
+        try {
+            selectDepartament();
+            insertSeller();
+            updateSeller();
+            deleteDepartament();
+        } catch (DBException error) {
+            System.out.println(error.getMessage());
+        }
     }
 
     public static void selectDepartament() {
@@ -90,6 +96,33 @@ public class Program {
             }
         } catch (SQLException error)  {
             throw new DBException(error.getMessage());
+        } finally {
+            DB.closeStatement(preparedStatement);
+            DB.closeConnection();
+        }
+    }
+
+    public static void deleteDepartament() {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DB.getConnection();
+            preparedStatement = connection.prepareStatement("""
+                                   DELETE FROM department
+                                   WHERE Id = ?""");
+            preparedStatement.setInt(1, 5);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                while (resultSet.next()) {
+                    int id = resultSet.getInt(1);
+                    System.out.println("Done! id = " + id);
+                }
+            } else {
+                System.out.println("No rown affected!");
+            }
+        } catch (SQLException error)  {
+            throw new DBIntegrityException(error.getMessage());
         } finally {
             DB.closeStatement(preparedStatement);
             DB.closeConnection();
