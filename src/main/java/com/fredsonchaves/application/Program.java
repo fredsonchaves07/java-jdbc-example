@@ -128,4 +128,30 @@ public class Program {
             DB.closeConnection();
         }
     }
+
+    public void jdbcTransaction() {
+        Connection connection = null;
+
+        Statement statement = null;
+        try {
+            connection = DB.getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.createStatement();
+            int rows1 = statement.executeUpdate("UPDATE seller SET BaseSalary = 2090 WHERE DepartmentId = 1");
+            int rows2 = statement.executeUpdate("UPDATE seller SET BaseSalary = 3090 WHERE DepartmentId = 2");
+            connection.commit();
+            System.out.println(rows1);
+            System.out.println(rows2);
+        } catch (SQLException error)  {
+            try {
+                connection.rollback();
+                throw new DBException(error.getMessage());
+            } catch (SQLException e) {
+                throw new DBException(e.getMessage());
+            }
+        } finally {
+            DB.closeStatement(statement);
+            DB.closeConnection();
+        }
+    }
 }
