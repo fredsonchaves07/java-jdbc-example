@@ -12,6 +12,7 @@ public class Program {
     public static void main(String[] args) {
         selectDepartament();
         insertSeller();
+        updateSeller();
     }
 
     public static void selectDepartament() {
@@ -59,6 +60,35 @@ public class Program {
                 System.out.println("No rown affected!");
             }
         } catch (SQLException | ParseException error) {
+            throw new DBException(error.getMessage());
+        } finally {
+            DB.closeStatement(preparedStatement);
+            DB.closeConnection();
+        }
+    }
+
+    public static void updateSeller() {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DB.getConnection();
+            preparedStatement = connection.prepareStatement("""
+                                    UPDATE seller
+                                    SET BaseSalary = BaseSalary + ?
+                                    WHERE Id = ?""");
+            preparedStatement.setDouble(1, 200.0);
+            preparedStatement.setInt(2, 2);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                while (resultSet.next()) {
+                    int id = resultSet.getInt(1);
+                    System.out.println("Done! id = " + id);
+                }
+            } else {
+                System.out.println("No rown affected!");
+            }
+        } catch (SQLException error)  {
             throw new DBException(error.getMessage());
         } finally {
             DB.closeStatement(preparedStatement);
