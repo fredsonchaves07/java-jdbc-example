@@ -3,6 +3,8 @@ package com.fredsonchaves.application;
 import com.fredsonchaves.db.DB;
 import com.fredsonchaves.db.DBException;
 import com.fredsonchaves.db.DBIntegrityException;
+import com.fredsonchaves.models.entities.Department;
+import com.fredsonchaves.models.entities.Seller;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -11,14 +13,19 @@ import java.text.SimpleDateFormat;
 public class Program {
 
     public static void main(String[] args) {
-        try {
-            selectDepartament();
-            insertSeller();
-            updateSeller();
-            deleteDepartament();
-        } catch (DBException error) {
-            System.out.println(error.getMessage());
-        }
+
+        Department department = new Department(1, "Books");
+        Seller seller = new Seller(1, "Bob", "bob@email.com", new Date(1995, 2, 10), 3000.0, department);
+        System.out.println(department);
+        System.out.println(seller);
+//        try {
+//            selectDepartament();
+//            insertSeller();
+//            updateSeller();
+//            deleteDepartament();
+//        } catch (DBException error) {
+//            System.out.println(error.getMessage());
+//        }
     }
 
     public static void selectDepartament() {

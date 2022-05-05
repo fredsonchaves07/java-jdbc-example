@@ -4,7 +4,7 @@ import com.fredsonchaves.models.entities.Seller;
 
 import java.util.List;
 
-public interface SelerDAO {
+public interface SellerDAO {
 
     void insert(Seller seller);
     void update(Seller seller);
