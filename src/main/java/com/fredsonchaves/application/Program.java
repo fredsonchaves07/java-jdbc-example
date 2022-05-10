@@ -27,5 +27,15 @@ public class Program {
         seller = new Seller(null, "Gred", "greg@email.com", new Date(1995, 5, 10), 4000.0, department);
         sellerDAO.insert(seller);
         System.out.println("Inserted! New id = " + seller.getId());
+        System.out.println("\n=== TEST #5: seller insert ===");
+        seller = sellerDAO.findById(1);
+        seller.setName("Martha Waine");
+        sellerDAO.update(seller);
+        seller = sellerDAO.findById(1);
+        System.out.println("Updated! Seller = " + seller);
+        sellerDAO.deleteById(9);
+        System.out.println("\n=== TEST #6: seller delete ===");
+        sellers = sellerDAO.findAll();
+        System.out.println(sellers);
     }
 }
